@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
+* {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+}
+
+body {
+  background-color: rgb(255, 255, 255);
+}
+.app {
+  margin: 2rem auto;
+  max-width: 1000px;
+}
+
+.new-acc {
+  display: flex;
+  justify-content: right;
+  gap: 0.5rem;
+  input {
+    width: 200px;
+  }
+}
+
+form {
+  display: flex;
+  gap: 0.6rem;
+}
