@@ -1,11 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './app.scss'
 import AcountList from './Components/account-list/account-list'
-
 import { useState, useRef } from 'react'
 
 function App() {
-  const [users, setUsers] = useState([])
+  const getLocalStorage = (key) => {
+    const value = localStorage.getItem(key)
+    if (null === value) {
+      return []
+    }
+    return JSON.parse(value)
+  }
+  const [users, setUsers] = useState(() => getLocalStorage('data') || [])
   const username = useRef('')
   const surname = useRef('')
 
@@ -14,7 +20,6 @@ function App() {
     const isFilledFields =
       username.current.value !== '' && surname.current.value !== ''
     if (isFilledFields) {
-      console.log(username.current.value)
       const userData = {
         id: Math.floor(Math.random() * 100),
         userName: username.current.value,
@@ -25,8 +30,6 @@ function App() {
 
       username.current.value = ''
       surname.current.value = ''
-    } else {
-      alert('Atsiprašau už alertą, prašau užpildyti visus laukus')
     }
   }
 
@@ -38,6 +41,24 @@ function App() {
   const onRemoveHandler = (id) => {
     setUsers((prev) => prev.filter((e) => e.id !== id))
   }
+
+  const onBalanceHandler = (id, balance) => {
+    console.log(id, balance)
+    setUsers((prev) =>
+      prev.map((acc) => {
+        if (acc.id === id) {
+          acc.balance = balance
+          return acc
+        }
+        return acc
+      })
+    )
+  }
+
+  const setLocalStorage = (key, value) => {
+    localStorage.setItem(key, JSON.stringify(value))
+  }
+  setLocalStorage('data', users)
 
   return (
     <div className="app">
@@ -67,7 +88,11 @@ function App() {
           </button>
         </form>
       </div>
-      <AcountList users={users} onRemove={onRemoveHandler} />
+      <AcountList
+        users={users}
+        onRemove={onRemoveHandler}
+        onAddFunds={onBalanceHandler}
+      />
     </div>
   )
 }
